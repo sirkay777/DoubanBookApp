@@ -25,12 +25,10 @@ class SearchBox extends Component{
       <View>
         <TextInput style={styles.searchInput}
           placeholder="请输入搜索关键词"
-          ref="KeywordTextInput"
           onChangeText={text => this.props.onKeywordChange(text)}
           value={this.props.keyword} />
         <View style={styles.switchWrapper}>
           <Switch
-            ref="highRatingOnlyInput"
             onValueChange={value => this.props.onSwitchChange(value)}
             value={this.props.highRatingOnly} />
           <Text style={styles.switchText}>只显示8星以上</Text>
@@ -45,6 +43,18 @@ class BookList extends React.Component{
     super(props);
     this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
   }
+  _renderRow(book){
+    return (
+      <View style={styles.bookRow}>
+        <Image source={{uri:book.image}} style={styles.bookImage}/>
+        <View style={styles.bookRowContent}>
+          <Text>{book.title}</Text>
+          <Text>{book.author}</Text>
+          <Text>{book.rating.average}</Text>
+        </View>
+      </View>
+    )
+  }
   render(){
     let books = this.props.books.filter((book)=>{
       if(this.props.highRatingOnly && book.rating.average < 8.0){
@@ -55,16 +65,7 @@ class BookList extends React.Component{
     return (
       <ListView
         dataSource={this.ds.cloneWithRows(books)}
-        renderRow={(book) => {return (
-          <View style={styles.bookRow}>
-            <Image source={{uri:book.image}} style={styles.bookImage}/>
-            <View style={styles.bookRowContent}>
-              <Text>{book.title}</Text>
-              <Text>{book.author}</Text>
-              <Text>{book.rating.average}</Text>
-            </View>
-          </View>
-        )}}
+        renderRow={this._renderRow}
      />
     );
   }
