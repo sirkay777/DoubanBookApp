@@ -67,6 +67,7 @@ class BookList extends React.Component{
       <ListView
         dataSource={this.ds.cloneWithRows(books)}
         renderRow={this._renderRow}
+        enableEmptySections={true}
      />
     );
   }
