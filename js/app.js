@@ -9,6 +9,7 @@ import {
   ScrollView,
   ListView
 } from 'react-native';
+import debounce from 'debounce';
 
 class Logo extends Component{
   render(){
@@ -71,7 +72,7 @@ class BookList extends React.Component{
   }
 }
 
-class DoubanBookSearch extends Component{
+export default class DoubanBookSearch extends Component{
   constructor(props) {
     super(props);
     this.state = {
@@ -81,7 +82,6 @@ class DoubanBookSearch extends Component{
     };
     this.handleKeywordChange = this.handleKeywordChange.bind(this);
     this.handleSwitchChange = this.handleSwitchChange.bind(this);
-    let debounce = require('debounce');
     this._getBooks = debounce(this._getBooks, 1000);
   }
   _getBooks(keyword) {
@@ -165,5 +165,3 @@ const styles = StyleSheet.create({
     height:140,
   }
 });
-
-module.exports = DoubanBookSearch;

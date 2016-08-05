@@ -4,7 +4,7 @@
  * @flow
  */
 
-const {AppRegistry} = require('react-native');
-const DoubanBookSearch = require('./js/app');
+import {AppRegistry} from 'react-native';
+import DoubanBookSearch from './js/app';
 
 AppRegistry.registerComponent('DoubanBookSearch', () => DoubanBookSearch);
