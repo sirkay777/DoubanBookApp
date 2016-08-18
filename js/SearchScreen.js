@@ -8,7 +8,8 @@ import {
   Switch,
   ScrollView,
   ListView,
-  TouchableHighlight
+  TouchableHighlight,
+  ActivityIndicator
 } from 'react-native';
 import debounce from 'debounce';
 
@@ -25,10 +26,16 @@ class SearchBox extends Component{
   render(){
     return (
       <View>
-        <TextInput style={styles.searchInput}
-          placeholder="请输入搜索关键词"
-          onChangeText={text => this.props.onKeywordChange(text)}
-          value={this.props.keyword} />
+        <View style={styles.searchInputWrapper}>
+          <TextInput style={styles.searchInput}
+            placeholder="请输入搜索关键词"
+            onChangeText={text => this.props.onKeywordChange(text)}
+            value={this.props.keyword} />
+          <ActivityIndicator
+           style={styles.loadingIndicator}
+           animating={this.props.isLoading}
+           />
+        </View>
         <View style={styles.switchWrapper}>
           <Switch
             onValueChange={value => this.props.onSwitchChange(value)}
@@ -83,11 +90,12 @@ export default class SearchScreen extends Component{
     this.state = {
       books:[],
       keyword:'',
-      highRatingOnly:false
+      highRatingOnly:false,
+      isLoading:false,
     };
     this.handleKeywordChange = this.handleKeywordChange.bind(this);
     this.handleSwitchChange = this.handleSwitchChange.bind(this);
-    this._getBooks = debounce(this._getBooks, 1000);
+    this._getBooks = debounce(this._getBooks, 500);
     this.selectBook = this.selectBook.bind(this);
   }
   selectBook(book){
@@ -98,13 +106,15 @@ export default class SearchScreen extends Component{
     });
   }
   _getBooks(keyword) {
+    this.setState({isLoading:true});
     fetch('https://api.douban.com/v2/book/search?q=' + keyword, {mode:'cors'})
       .then((response) => response.json())
       .then((responseJson) => {
-        this.setState({books:responseJson.books});
+        this.setState({isLoading:false, books:responseJson.books});
       })
       .catch((error) => {
         console.error(error);
+        this.setState({isLoading:false});
       });
   }
   handleKeywordChange(keyword){
@@ -127,6 +137,7 @@ export default class SearchScreen extends Component{
       <ScrollView style={styles.container}>
         <Logo/>
         <SearchBox keyword={this.state.keyword}
+          isLoading={this.state.isLoading}
           highRatingOnly={this.state.highRatingOnly}
           onKeywordChange={this.handleKeywordChange}
           onSwitchChange={this.handleSwitchChange}/>
@@ -149,17 +160,25 @@ const styles = StyleSheet.create({
     width:153,
     height:30,
   },
-  searchInput: {
+  searchInputWrapper:{
+    flex:1,
+    flexDirection:'row',
     borderColor: '#CCCCCC',
     borderWidth: 1,
-    height: 40,
-    padding: 5,
     marginVertical: 10,
+    padding: 5,
+  },
+  searchInput: {
+    flex:8,
+    height: 40
   },
   switchWrapper: {
     flex:1,
     flexDirection: 'row',
     marginBottom:15,
+  },
+  loadingIndicator:{
+    flex:1,
   },
   switchText: {
     marginLeft:10,
