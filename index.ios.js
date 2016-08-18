@@ -5,6 +5,6 @@
  */
 
 import {AppRegistry} from 'react-native';
-import DoubanBookSearch from './js/app';
+import DoubanBookApp from './js/DoubanBookApp';
 
-AppRegistry.registerComponent('DoubanBookSearch', () => DoubanBookSearch);
+AppRegistry.registerComponent('DoubanBookApp', () => DoubanBookApp);

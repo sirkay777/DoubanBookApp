@@ -1,4 +1,4 @@
-package com.doubanbooksearch;
+package com.doubanbookapp;
 
 import android.app.Application;
 import android.util.Log;
