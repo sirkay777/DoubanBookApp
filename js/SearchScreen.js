@@ -93,6 +93,7 @@ export default class SearchScreen extends Component{
   selectBook(book){
     this.props.navigator.push({
       name: 'book_detail',
+      title: 'Book Detail',
       book: book
     });
   }
@@ -142,6 +143,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding:30,
+    marginTop:50,
   },
   logo:{
     width:153,
