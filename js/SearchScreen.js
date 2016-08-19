@@ -1,16 +1,6 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TextInput,
-  Switch,
-  ScrollView,
-  ListView,
-  TouchableHighlight,
-  ActivityIndicator
-} from 'react-native';
+import {StyleSheet,Text,View,Image,TextInput,Switch,ScrollView,ListView,
+  TouchableHighlight,ActivityIndicator} from 'react-native';
 import debounce from 'debounce';
 
 class Logo extends Component{
@@ -98,6 +88,10 @@ export default class SearchScreen extends Component{
     this._getBooks = debounce(this._getBooks, 500);
     this.selectBook = this.selectBook.bind(this);
   }
+  componentDidMount(){
+    this.setState({keyword:'Programming', highRatingOnly:true});
+    this._getBooks();
+  }
   selectBook(book){
     this.props.navigator.push({
       name: 'book_detail',
@@ -105,9 +99,9 @@ export default class SearchScreen extends Component{
       book: book
     });
   }
-  _getBooks(keyword) {
+  _getBooks() {
     this.setState({isLoading:true});
-    fetch('https://api.douban.com/v2/book/search?q=' + keyword, {mode:'cors'})
+    fetch('https://api.douban.com/v2/book/search?tag=' + this.state.keyword, {mode:'cors'})
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({isLoading:false, books:responseJson.books});
@@ -122,7 +116,7 @@ export default class SearchScreen extends Component{
         keyword:keyword
     });
     if(keyword.trim()){
-      this._getBooks(keyword);
+      this._getBooks();
     }else{
       this.setState({books:[]});
     }
