@@ -25,9 +25,20 @@ class TagList extends Component{
       console.log(error);
     } );
   }
+  searchTag(tag){
+    this.props.navigator.push({
+      name: 'search',
+      title: 'Search',
+      tag: tag
+    });
+  }
   render(){
     let tags = this.state.tags.slice(0,10).map(tag=>{
-      return (<Text style={styles.tag} key={tag}>{tag}</Text>);
+      return (
+        <TouchableHighlight key={tag} onPress={()=>this.searchTag(tag)}>
+          <Text style={styles.tag}>{tag}</Text>
+        </TouchableHighlight>
+      );
     });
     return (
       <View>
@@ -43,10 +54,7 @@ export default class BookDetailScreen extends Component{
     return (
       <View style={styles.container}>
         <Text>{this.props.book.title}</Text>
-        <TouchableHighlight onPress={()=>this.props.navigator.pop()}>
-          <Text style={{color:'blue'}}>Back</Text>
-        </TouchableHighlight>
-        <TagList bookId={this.props.book.id}/>
+        <TagList bookId={this.props.book.id} navigator={this.props.navigator}/>
       </View>
     );
   }
@@ -63,5 +71,6 @@ const styles = StyleSheet.create({
   },
   tag:{
     marginVertical:5,
+    color:'blue',
   }
 });

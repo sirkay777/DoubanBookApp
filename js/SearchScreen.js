@@ -65,7 +65,9 @@ class BookList extends React.Component{
       return true;
     });
     return (
-      <ListView
+      (this.props.keyword && books.length == 0 && !this.props.isLoading) ?
+       <Text>没有搜索结果！</Text>
+      : <ListView
         dataSource={this.ds.cloneWithRows(books)}
         renderRow={this._renderRow}
         enableEmptySections={true}
@@ -79,7 +81,7 @@ export default class SearchScreen extends Component{
     super(props);
     this.state = {
       books:[],
-      keyword:'',
+      keyword:props.tag,
       highRatingOnly:false,
       isLoading:false,
     };
@@ -89,8 +91,9 @@ export default class SearchScreen extends Component{
     this.selectBook = this.selectBook.bind(this);
   }
   componentDidMount(){
-    this.setState({keyword:'Programming', highRatingOnly:true});
-    this._getBooks();
+    if(this.props.tag){
+      this._getBooks();
+    }
   }
   selectBook(book){
     this.props.navigator.push({
@@ -138,6 +141,8 @@ export default class SearchScreen extends Component{
         <BookList
           books={this.state.books}
           highRatingOnly={this.state.highRatingOnly}
+          keyword={this.state.keyword}
+          isLoading={this.state.isLoading}
           selectBook={this.selectBook} />
       </ScrollView>
     );

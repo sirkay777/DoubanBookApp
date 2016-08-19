@@ -8,7 +8,7 @@ export default class DoubanBookApp extends Component{
     if(route.name == 'book_detail'){
       return <BookDetailScreen book={route.book} navigator={navigator}/>
     }else{
-      return <SearchScreen navigator={navigator}/>;
+      return <SearchScreen navigator={navigator} tag={route.tag}/>;
     }
   }
   getNavigationBar(){
@@ -38,7 +38,7 @@ export default class DoubanBookApp extends Component{
   }
   render(){
     return <Navigator
-      initialRoute={{name:'search', title:'Search'}}
+      initialRoute={{name:'search', title:'Search', tag:'Programming'}}
       renderScene={this.renderScene}
       navigationBar={this.getNavigationBar()}
       />
