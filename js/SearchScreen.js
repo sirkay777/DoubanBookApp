@@ -42,6 +42,7 @@ class BookList extends React.Component{
     super(props);
     this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this._renderRow = this._renderRow.bind(this);
+    this._renderFooter = this._renderFooter.bind(this);
   }
   _renderRow(book){
     return (
@@ -57,6 +58,13 @@ class BookList extends React.Component{
         </TouchableHighlight>
     )
   }
+  _renderFooter()
+  {
+    return (
+      <ActivityIndicator
+        animating={this.props.isLoadingTail}/>
+      );
+  }
   render(){
     let books = this.props.books.filter((book)=>{
       if(this.props.highRatingOnly && book.rating.average < 8.0){
@@ -69,11 +77,20 @@ class BookList extends React.Component{
       : <ListView
         dataSource={this.ds.cloneWithRows(books)}
         renderRow={this._renderRow}
+        renderFooter={this._renderFooter}
+        onEndReached={this.props.loadMore}
         enableEmptySections={true}
+        showsVerticalScrollIndicator={false}
      />
     );
   }
 }
+
+var CACHE={
+  books:{},
+  nextOffset:{},
+  total:{}
+};
 
 export default class SearchScreen extends Component{
   constructor(props) {
@@ -83,11 +100,13 @@ export default class SearchScreen extends Component{
       keyword:props.tag,
       highRatingOnly:true,
       isLoading:false,
+      isLoadingTail:false,
     };
     this.handleKeywordChange = this.handleKeywordChange.bind(this);
     this.handleSwitchChange = this.handleSwitchChange.bind(this);
     this._getBooks = debounce(this._getBooks, 500);
     this.selectBook = this.selectBook.bind(this);
+    this.loadMore = this.loadMore.bind(this);
   }
   componentDidMount(){
     if(this.props.tag){
@@ -102,15 +121,48 @@ export default class SearchScreen extends Component{
     });
   }
   _getBooks() {
+    if(CACHE.books[this.state.keyword]){
+      this.setState({books:CACHE.books[this.state.keyword]});
+      return;
+    }
     this.setState({isLoading:true});
     fetch('https://api.douban.com/v2/book/search?tag=' + this.state.keyword, {mode:'cors'})
       .then((response) => response.json())
       .then((responseJson) => {
+        if(responseJson.msg){
+          throw new Error(responseJson.msg);
+        }
+        CACHE.books[this.state.keyword] = responseJson.books;
+        CACHE.nextOffset[this.state.keyword] = responseJson.count;
+        CACHE.total[this.state.keyword] = responseJson.total;
         this.setState({isLoading:false, books:responseJson.books});
       })
       .catch((error) => {
         console.error(error);
         this.setState({isLoading:false});
+      });
+  }
+  hasMore(){
+    return CACHE.nextOffset[this.state.keyword] < CACHE.total[this.state.keyword];
+  }
+  loadMore(){
+    if(!this.hasMore() || this.isLoadingTail) return;
+    this.setState({isLoadingTail:true});
+    fetch('https://api.douban.com/v2/book/search?tag=' + this.state.keyword
+      + '&start=' + CACHE.nextOffset[this.state.keyword], {mode:'cors'})
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if(responseJson.msg){
+          throw new Error(responseJson.msg);
+        }
+        let books = this.state.books.concat(responseJson.books);
+        CACHE.books[this.state.keyword] = books;
+        CACHE.nextOffset[this.state.keyword] += responseJson.count;
+        this.setState({isLoadingTail:false, books:books});
+      })
+      .catch((error) => {
+        console.error(error);
+        this.setState({isLoadingTail:false});
       });
   }
   handleKeywordChange(keyword){
@@ -130,7 +182,7 @@ export default class SearchScreen extends Component{
   }
   render(){
     return (
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <Logo/>
         <SearchBox keyword={this.state.keyword}
           isLoading={this.state.isLoading}
@@ -141,9 +193,10 @@ export default class SearchScreen extends Component{
           books={this.state.books}
           highRatingOnly={this.state.highRatingOnly}
           keyword={this.state.keyword}
-          isLoading={this.state.isLoading}
-          selectBook={this.selectBook} />
-      </ScrollView>
+          isLoadingTail={this.state.isLoadingTail}
+          selectBook={this.selectBook}
+          loadMore={this.loadMore}/>
+      </View>
     );
   }
 }
