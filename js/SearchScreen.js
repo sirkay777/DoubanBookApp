@@ -45,8 +45,8 @@ class BookList extends React.Component{
   }
   _renderRow(book){
     return (
-        <TouchableHighlight style={styles.bookRow} onPress={()=>this.props.selectBook(book)} >
-          <View>
+        <TouchableHighlight  onPress={()=>this.props.selectBook(book)} >
+          <View style={styles.bookRow}>
             <Image source={{uri:book.image}} style={styles.bookImage}/>
             <View style={styles.bookRowContent}>
               <Text>{book.title}</Text>
@@ -65,8 +65,7 @@ class BookList extends React.Component{
       return true;
     });
     return (
-      (this.props.keyword && books.length == 0 && !this.props.isLoading) ?
-       <Text>没有搜索结果！</Text>
+      (this.props.keyword && books.length == 0 ) ? <Text>没有搜索结果！</Text>
       : <ListView
         dataSource={this.ds.cloneWithRows(books)}
         renderRow={this._renderRow}
@@ -82,7 +81,7 @@ export default class SearchScreen extends Component{
     this.state = {
       books:[],
       keyword:props.tag,
-      highRatingOnly:false,
+      highRatingOnly:true,
       isLoading:false,
     };
     this.handleKeywordChange = this.handleKeywordChange.bind(this);
@@ -169,7 +168,8 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex:8,
-    height: 40
+    height: 40,
+    backgroundColor: 'transparent'
   },
   switchWrapper: {
     flex:1,

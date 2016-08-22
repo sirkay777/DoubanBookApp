@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Navigator,Text,TouchableHighlight} from 'react-native';
+import {Navigator,Text,TouchableHighlight,Platform,StyleSheet} from 'react-native';
 import SearchScreen from './SearchScreen';
 import BookDetailScreen from './BookDetailScreen';
 
@@ -22,7 +22,7 @@ export default class DoubanBookApp extends Component{
             } else {
               return (
                 <TouchableHighlight onPress={() => navigator.pop()} >
-                  <Text style={{color:'blue',paddingTop:5,paddingLeft:5,fontWeight:'bold'}}>&lt; Back</Text>
+                  <Text style={styles.navLeftButton}>&lt; Back</Text>
                 </TouchableHighlight>
               );
             }
@@ -30,9 +30,9 @@ export default class DoubanBookApp extends Component{
           RightButton: (route, navigator, index, navState) =>
            { return null; },
           Title: (route, navigator, index, navState) =>
-           { return (<Text style={{fontWeight:'bold', paddingTop:5}}>{route.title}</Text>); },
+           { return (<Text style={styles.navTitle}>{route.title}</Text>); },
        }}
-       style={{backgroundColor: '#eaffea',height:50}}
+       style={styles.navBar}
      />
     );
   }
@@ -44,3 +44,20 @@ export default class DoubanBookApp extends Component{
       />
   }
 }
+
+const styles = StyleSheet.create({
+  navBar: {
+    backgroundColor: '#eaffea',
+    height:50
+  },
+  navTitle: {
+    fontWeight:'bold',
+    paddingTop:(Platform.OS === 'ios') ? 5 : 20,
+  },
+  navLeftButton:{
+    color:'blue',
+    paddingTop:(Platform.OS === 'ios') ? 5 : 13,
+    paddingLeft:(Platform.OS === 'ios') ? 5 : 0,
+    fontWeight:'bold'
+  }
+});
