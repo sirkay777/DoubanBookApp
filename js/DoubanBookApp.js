@@ -21,7 +21,8 @@ export default class DoubanBookApp extends Component{
               return null;
             } else {
               return (
-                <TouchableHighlight onPress={() => navigator.pop()} >
+                <TouchableHighlight onPress={() => navigator.pop()}
+                  underlayColor='transparent'>
                   <Text style={styles.navLeftButton}>&lt; 返回</Text>
                 </TouchableHighlight>
               );
@@ -41,6 +42,7 @@ export default class DoubanBookApp extends Component{
       initialRoute={{name:'home', title:'首页', tag:'计算机'}}
       renderScene={this.renderScene}
       navigationBar={this.getNavigationBar()}
+      configureScene={(route, routeStack) => Navigator.SceneConfigs.FadeAndroid}
       />
   }
 }
@@ -58,6 +60,7 @@ const styles = StyleSheet.create({
     color:'blue',
     paddingTop:(Platform.OS === 'ios') ? 5 : 13,
     paddingLeft:(Platform.OS === 'ios') ? 5 : 0,
-    fontWeight:'bold'
+    fontWeight:'bold',
+    height:50
   }
 });

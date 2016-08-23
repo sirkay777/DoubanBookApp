@@ -41,7 +41,7 @@ class TagList extends Component{
       );
     });
     return (
-      <View>
+      <View style={styles.tagsContainer}>
         <Text style={styles.popTagTitle}>热门标签</Text>
         <ActivityIndicator
           animating={this.state.isLoading}/>
@@ -71,6 +71,7 @@ export default class BookDetailScreen extends Component{
 
 const styles = StyleSheet.create({
   container:{
+    flex:1,
     paddingVertical:70,
     paddingHorizontal:20,
   },
@@ -94,5 +95,8 @@ const styles = StyleSheet.create({
   },
   popTagTitle:{
     fontWeight:'bold',
+  },
+  tagsContainer:{
+    paddingBottom:50,
   }
 });

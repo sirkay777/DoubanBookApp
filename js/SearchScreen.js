@@ -46,7 +46,9 @@ class BookList extends React.Component{
   }
   _renderRow(book){
     return (
-        <TouchableHighlight  onPress={()=>this.props.selectBook(book)} >
+        <TouchableHighlight
+          onPress={()=>this.props.selectBook(book)}
+          underlayColor='transparent'>
           <View style={styles.bookRow}>
             <Image source={{uri:book.image}} style={styles.bookImage}/>
             <View style={styles.bookRowContent}>
@@ -212,25 +214,24 @@ const styles = StyleSheet.create({
     height:30,
   },
   searchInputWrapper:{
-    flex:1,
     flexDirection:'row',
     borderColor: '#CCCCCC',
     borderWidth: 1,
     marginVertical: 10,
     padding: 5,
+    alignItems: 'center',
   },
   searchInput: {
     flex:8,
     height: 40,
     backgroundColor: 'transparent'
   },
-  switchWrapper: {
-    flex:1,
-    flexDirection: 'row',
-    marginBottom:15,
-  },
   loadingIndicator:{
     flex:1,
+  },
+  switchWrapper: {
+    flexDirection: 'row',
+    marginBottom:15,
   },
   switchText: {
     marginLeft:10,
