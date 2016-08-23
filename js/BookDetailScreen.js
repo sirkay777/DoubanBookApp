@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet,View,Text,TouchableHighlight,ActivityIndicator} from 'react-native';
+import {StyleSheet,View,Text,Image,TouchableHighlight,ActivityIndicator,ScrollView} from 'react-native';
 
 class TagList extends Component{
   constructor(props){
@@ -42,9 +42,10 @@ class TagList extends Component{
     });
     return (
       <View>
+        <Text style={styles.popTagTitle}>热门标签</Text>
         <ActivityIndicator
           animating={this.state.isLoading}/>
-        <View style={styles.tagsWrapper}>{tags}</View>
+        {tags}
       </View>
     );
   }
@@ -52,25 +53,46 @@ class TagList extends Component{
 export default class BookDetailScreen extends Component{
   render(){
     return (
-      <View style={styles.container}>
-        <Text>{this.props.book.title}</Text>
+      <ScrollView style={styles.container}>
+        <View style={styles.detailWrapper}>
+          <Image source={{uri:this.props.book.image}} style={styles.bookImage}/>
+          <View style={styles.bookDetail}>
+            <Text>{this.props.book.title}</Text>
+            <Text>{this.props.book.author}</Text>
+            <Text>{this.props.book.rating.average}</Text>
+          </View>
+        </View>
+        <Text style={styles.bookSummary}>{this.props.book.summary}</Text>
         <TagList bookId={this.props.book.id} navigator={this.props.navigator}/>
-      </View>
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container:{
-    flex:1,
-    justifyContent:'center',
-    alignItems:'center'
-  },
-  tagsWrapper: {
-    flex:1,
+    paddingVertical:70,
+    paddingHorizontal:20,
   },
   tag:{
     marginVertical:5,
     color:'blue',
+  },
+  detailWrapper:{
+    flexDirection:'row'
+  },
+  bookImage:{
+    width:100,
+    height:140,
+  },
+  bookDetail:{
+    justifyContent: 'space-between',
+    paddingLeft:20
+  },
+  bookSummary:{
+    paddingVertical:15,
+  },
+  popTagTitle:{
+    fontWeight:'bold',
   }
 });
