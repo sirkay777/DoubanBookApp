@@ -116,7 +116,7 @@ export default class SearchScreen extends Component{
   selectBook(book){
     this.props.navigator.push({
       name: 'book_detail',
-      title: 'Book Detail',
+      title: book.title + ' 详情',
       book: book
     });
   }

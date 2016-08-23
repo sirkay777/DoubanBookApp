@@ -28,7 +28,7 @@ class TagList extends Component{
   searchTag(tag){
     this.props.navigator.push({
       name: 'search',
-      title: 'Search',
+      title: '标记为 "' + tag + '" 的书',
       tag: tag
     });
   }

@@ -17,12 +17,12 @@ export default class DoubanBookApp extends Component{
        routeMapper={{
          LeftButton: (route, navigator, index, navState) =>
           {
-            if (route.name == 'search') {
+            if (route.name == 'home') {
               return null;
             } else {
               return (
                 <TouchableHighlight onPress={() => navigator.pop()} >
-                  <Text style={styles.navLeftButton}>&lt; Back</Text>
+                  <Text style={styles.navLeftButton}>&lt; 返回</Text>
                 </TouchableHighlight>
               );
             }
@@ -38,7 +38,7 @@ export default class DoubanBookApp extends Component{
   }
   render(){
     return <Navigator
-      initialRoute={{name:'search', title:'Search', tag:'Programming'}}
+      initialRoute={{name:'home', title:'首页', tag:'计算机'}}
       renderScene={this.renderScene}
       navigationBar={this.getNavigationBar()}
       />
