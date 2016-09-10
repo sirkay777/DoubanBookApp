@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
 import {Navigator,Text,TouchableHighlight,Platform,StyleSheet} from 'react-native';
+import {createStore,applyMiddleware} from 'redux';
+import {Provider} from 'react-redux';
+import thunkMiddleware from 'redux-thunk';
 import SearchScreen from './SearchScreen';
 import BookDetailScreen from './BookDetailScreen';
+import rootReducer from './reducers';
+
 
 export default class DoubanBookApp extends Component{
   renderScene(route, navigator){
@@ -38,12 +43,16 @@ export default class DoubanBookApp extends Component{
     );
   }
   render(){
-    return <Navigator
-      initialRoute={{name:'home', title:'首页', tag:'计算机'}}
-      renderScene={this.renderScene}
-      navigationBar={this.getNavigationBar()}
-      configureScene={(route, routeStack) => Navigator.SceneConfigs.FadeAndroid}
-      />
+    return (
+      <Provider store={createStore(rootReducer, applyMiddleware(thunkMiddleware))}>
+        <Navigator
+          initialRoute={{name:'home', title:'首页', tag:'计算机'}}
+          renderScene={this.renderScene}
+          navigationBar={this.getNavigationBar()}
+          configureScene={(route, routeStack) => Navigator.SceneConfigs.FadeAndroid}
+          />
+      </Provider>
+  );
   }
 }
 

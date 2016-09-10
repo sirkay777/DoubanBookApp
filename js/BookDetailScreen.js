@@ -2,29 +2,6 @@ import React, {Component} from 'react';
 import {StyleSheet,View,Text,Image,TouchableHighlight,ActivityIndicator,ScrollView} from 'react-native';
 
 class TagList extends Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      isLoading:false,
-      tags:[]
-    };
-  }
-  componentDidMount(){
-    this.fetchTags();
-  }
-  fetchTags(){
-    this.setState({isLoading:true});
-    fetch('https://api.douban.com/v2/book/' + this.props.bookId + '/tags')
-    .then(response => response.json())
-    .then(responseJson => {
-      let tags = responseJson.tags.map(tag=>tag.name);
-      this.setState({tags: tags, isLoading:false});
-    })
-    .catch(error => {
-      this.setState({isLoading:false});
-      console.log(error);
-    } );
-  }
   searchTag(tag){
     this.props.navigator.push({
       name: 'search',
@@ -33,19 +10,17 @@ class TagList extends Component{
     });
   }
   render(){
-    let tags = this.state.tags.slice(0,10).map(tag=>{
+    let tags = this.props.tags.map(tag=>{
       return (
-        <TouchableHighlight key={tag} onPress={()=>this.searchTag(tag)}>
-          <Text style={styles.tag}>{tag}</Text>
+        <TouchableHighlight underlayColor='transparent' key={tag.name} onPress={()=>this.searchTag(tag.name)}>
+          <Text style={styles.tag}>{tag.name}</Text>
         </TouchableHighlight>
       );
     });
     return (
-      <View style={styles.tagsContainer}>
+      <View>
         <Text style={styles.popTagTitle}>热门标签</Text>
-        <ActivityIndicator
-          animating={this.state.isLoading}/>
-        {tags}
+        <View style={styles.tagsContainer}>{tags}</View>
       </View>
     );
   }
@@ -63,7 +38,7 @@ export default class BookDetailScreen extends Component{
           </View>
         </View>
         <Text style={styles.bookSummary}>{this.props.book.summary}</Text>
-        <TagList bookId={this.props.book.id} navigator={this.props.navigator}/>
+        <TagList tags={this.props.book.tags} navigator={this.props.navigator}/>
       </ScrollView>
     );
   }
@@ -78,6 +53,10 @@ const styles = StyleSheet.create({
   tag:{
     marginVertical:5,
     color:'blue',
+    borderWidth:1,
+    borderColor:'#cccccc',
+    padding:5,
+    marginRight:10
   },
   detailWrapper:{
     flexDirection:'row'
@@ -97,6 +76,9 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
   },
   tagsContainer:{
-    paddingBottom:50,
+    flex:1,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    height:40
   }
 });
