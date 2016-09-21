@@ -28,7 +28,7 @@ class TagList extends Component{
 export default class BookDetailScreen extends Component{
   render(){
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container} >
         <View style={styles.detailWrapper}>
           <Image source={{uri:this.props.book.image}} style={styles.bookImage}/>
           <View style={styles.bookDetail}>
@@ -46,7 +46,6 @@ export default class BookDetailScreen extends Component{
 
 const styles = StyleSheet.create({
   container:{
-    flex:1,
     paddingVertical:70,
     paddingHorizontal:20,
   },
@@ -66,8 +65,9 @@ const styles = StyleSheet.create({
     height:140,
   },
   bookDetail:{
+    flex:1,
     justifyContent: 'space-between',
-    paddingLeft:20
+    paddingLeft:20,
   },
   bookSummary:{
     paddingVertical:15,

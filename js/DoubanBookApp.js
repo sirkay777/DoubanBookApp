@@ -45,8 +45,8 @@ export default class DoubanBookApp extends Component{
   render(){
     return (
       <Provider store={createStore(rootReducer, applyMiddleware(thunkMiddleware))}>
-        <Navigator
-          initialRoute={{name:'home', title:'首页', tag:'计算机'}}
+        <Navigator style={{flex:1}}
+          initialRoute={{name:'home', title:'首页', tag:'SICP'}}
           renderScene={this.renderScene}
           navigationBar={this.getNavigationBar()}
           configureScene={(route, routeStack) => Navigator.SceneConfigs.FadeAndroid}

@@ -124,7 +124,7 @@ BookList = connect(
       selectBook: (book)=>{
         props.navigator.push({
           name: 'book_detail',
-          title: book.title + ' 详情',
+          title: book.title.slice(0,30) + ' 详情',
           book: book
         });
       },
