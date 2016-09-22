@@ -3,6 +3,7 @@ import {View, Text, TabBarIOS} from 'react-native';
 import {connect} from 'react-redux';
 import SearchNavigation from './SearchNavigation';
 import {changeTab} from './actions';
+import AboutScreen from './AboutScreen';
 
 const tabBar = ({
   current,
@@ -28,9 +29,9 @@ const tabBar = ({
       </TabBarIOS.Item>
       <TabBarIOS.Item
         systemIcon='more'
-        selected={current == 'more'}
-        onPress={() => {changeTab('more')}}>
-        <View style={tabViewStyle}><Text>About</Text></View>
+        selected={current == 'about'}
+        onPress={() => {changeTab('about')}}>
+        <AboutScreen/>
       </TabBarIOS.Item>
     </TabBarIOS>
   );
