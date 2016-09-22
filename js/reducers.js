@@ -1,6 +1,6 @@
 import {
   REQUEST_BOOKS, RECEIVE_BOOKS, RATING_FILTER, CHANGE_KEYWORD,
-  REQUEST_MORE, RECEIVE_MORE
+  REQUEST_MORE, RECEIVE_MORE, CHANGE_TAB
 } from './actions';
 import {combineReducers} from 'redux';
 
@@ -60,7 +60,17 @@ const data = (state = {}, action) => {
   }
 };
 
+const tab = (state = 'search', action) => {
+  switch(action.type) {
+    case CHANGE_TAB:
+      return action.tab;
+    default:
+      return state;
+  }
+};
+
 export default rootReducer = combineReducers({
   input,
-  data
+  data,
+  tab
 });

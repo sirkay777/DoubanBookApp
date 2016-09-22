@@ -163,7 +163,7 @@ export default SearchScreen = connect(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding:30,
+    padding:5,
     marginTop:50,
   },
   logo:{
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex:8,
-    height: 40,
+    height: 30,
     backgroundColor: 'transparent'
   },
   loadingIndicator:{
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   },
   switchWrapper: {
     flexDirection: 'row',
-    marginBottom:15,
+    marginBottom:5,
   },
   switchText: {
     marginLeft:10,
