@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import SearchNavigation from './SearchNavigation';
 import {changeTab} from './actions';
 import AboutScreen from './AboutScreen';
+import LoginScreen from './LoginScreen';
 
 const tabBar = ({
   current,
@@ -25,7 +26,7 @@ const tabBar = ({
         systemIcon='favorites'
         selected={current == 'favorites'}
         onPress={() => {changeTab('favorites')}}>
-        <View style={tabViewStyle}><Text>Fav</Text></View>
+        <LoginScreen/>
       </TabBarIOS.Item>
       <TabBarIOS.Item
         systemIcon='more'
