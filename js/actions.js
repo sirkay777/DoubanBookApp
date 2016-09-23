@@ -96,7 +96,6 @@ export const fetchMore = () => {
 
 export const CHANGE_TAB = 'CHANGE_TAB';
 export const changeTab = (tab) => {
-  console.log('change tab');
   return {
     type: CHANGE_TAB,
     tab

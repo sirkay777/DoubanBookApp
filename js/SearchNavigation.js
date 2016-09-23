@@ -33,6 +33,8 @@ const getNavigationBar = () => {
 const renderScene = (route, navigator) => {
   if(route.name == 'book_detail'){
     return <BookDetailScreen book={route.book} navigator={navigator}/>
+  }else if (route.name == 'login') {
+    return <LoginScreen navigator={navigator}/>;
   }else{
     return <SearchScreen navigator={navigator} tag={route.tag}/>;
   }

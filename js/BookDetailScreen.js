@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet,View,Text,Image,TouchableHighlight,ActivityIndicator,ScrollView} from 'react-native';
+import {StyleSheet,View,Text,Image,TouchableHighlight,ActivityIndicator,ScrollView, AlertIOS} from 'react-native';
+import AV from 'leancloud-storage';
 
 class TagList extends Component{
   searchTag(tag){
@@ -35,6 +36,23 @@ export default class BookDetailScreen extends Component{
             <Text>{this.props.book.title}</Text>
             <Text>{this.props.book.author}</Text>
             <Text>{this.props.book.rating.average}</Text>
+            <TouchableHighlight underlayColor='transparent' onPress={()=>{
+              AV.User.currentAsync().then((currentUser) => {
+                if (!currentUser) {
+                  this.props.navigator.push({name:'login'});
+                }
+                else {
+                  AlertIOS.alert(
+                   'Success!',
+                   'Added to Fav!'
+                  );
+                }
+              }).catch(
+                (e)=>console.log(e)
+              );
+            }}>
+              <Text style={styles.addToFav}>收藏</Text>
+            </TouchableHighlight>
           </View>
         </View>
         <Text style={styles.bookSummary}>{this.props.book.summary}</Text>
@@ -80,5 +98,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     flexDirection: 'row',
     height:40
+  },
+  addToFav:{
+    color:'green'
   }
 });

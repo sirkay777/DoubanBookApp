@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "debounce": "^1.0.0",
+    "leancloud-storage": "^1.5.0",
     "react": "15.2.1",
     "react-native": "0.31.0",
     "react-redux": "^4.4.5",

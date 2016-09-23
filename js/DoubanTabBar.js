@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import SearchNavigation from './SearchNavigation';
 import {changeTab} from './actions';
 import AboutScreen from './AboutScreen';
-import LoginScreen from './LoginScreen';
+import FavNavigation from './FavNavigation';
 
 const tabBar = ({
   current,
@@ -13,6 +13,7 @@ const tabBar = ({
   const tabViewStyle =  {flex:1, alignItems:'center',justifyContent:'center'};
   return (
     <TabBarIOS
+      translucent={true}
       unselectedTintColor='black'
       tintColor='white'
       barTintColor='yellowgreen'>
@@ -26,7 +27,7 @@ const tabBar = ({
         systemIcon='favorites'
         selected={current == 'favorites'}
         onPress={() => {changeTab('favorites')}}>
-        <LoginScreen/>
+        <FavNavigation/>
       </TabBarIOS.Item>
       <TabBarIOS.Item
         systemIcon='more'
@@ -44,8 +45,6 @@ export default DoubanTabBar = connect(
   }},
   (dispatch) => {return {
     changeTab: (tab)=>{
-      console.log(changeTab(tab));
-      console.log('will dispatch changeTab');
       dispatch(changeTab(tab));
     }
   }}

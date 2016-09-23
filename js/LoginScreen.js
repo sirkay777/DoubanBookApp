@@ -1,34 +1,52 @@
 import React from 'react';
 import {TextInput, View, TouchableHighlight, Text, StyleSheet} from 'react-native';
+import AV from 'leancloud-storage';
 
-export default LoginScreen = () => {
+
+
+export default LoginScreen = ({
+  navigator
+}) => {
   let userName = '';
   let passWord = '';
   return (
     <View style={styles.container}>
-      <TextInput
-          style={styles.input}
-          onChangeText={(text) => {userName = text}}
-          placeholder="请输入用户名"
-        />
-      <TextInput
-      style={styles.input}
-          onChangeText={(text) => {passWord = text}}
-          placeholder="请输入密码"
-        />
-      <TouchableHighlight
-        style={styles.button}
-        onPress={()=>{}}>
-        <Text style={styles.buttonText}>登录</Text>
-      </TouchableHighlight>
+      <View>
+        <TextInput
+            autoFocus={true}
+            style={styles.input}
+            onChangeText={(text) => {userName = text}}
+            placeholder="请输入用户名"
+          />
+        <TextInput
+        style={styles.input}
+            onChangeText={(text) => {passWord = text}}
+            placeholder="请输入密码"
+            secureTextEntry={true}
+          />
+        <TouchableHighlight
+          style={styles.button}
+          onPress={()=>{
+            AV.User.logIn(userName, passWord).then( (loginedUser) => {
+               console.log(loginedUser);
+               navigator.pop()
+             }).catch(
+               (error) => console.log(error)
+             );
+          }}>
+          <Text style={styles.buttonText}>登录</Text>
+        </TouchableHighlight>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container:{
+    flex:1,
     paddingTop:30,
-    paddingHorizontal:5
+    paddingHorizontal:5,
+    justifyContent:'center'
   },
   input: {
     flex:1,
@@ -43,7 +61,8 @@ const styles = StyleSheet.create({
     alignItems:'center',
     padding:10,
     backgroundColor:'green',
-    height:35
+    height:35,
+    borderRadius: 8,
   },
   buttonText:{
     color:'white',
