@@ -1,11 +1,14 @@
 import React from 'react';
 import {TextInput, View, TouchableHighlight, Text, StyleSheet} from 'react-native';
 import AV from 'leancloud-storage';
+import {connect} from 'react-redux';
+import { fetchFavList, logIn } from './actions';
 
 
-
-export default LoginScreen = ({
-  navigator
+export default Login= ({
+  navigator,
+  fetchFavList,
+  logIn
 }) => {
   let userName = '';
   let passWord = '';
@@ -14,12 +17,13 @@ export default LoginScreen = ({
       <View>
         <TextInput
             autoFocus={true}
+            autoCapitalize='none'
             style={styles.input}
             onChangeText={(text) => {userName = text}}
             placeholder="请输入用户名"
           />
         <TextInput
-        style={styles.input}
+            style={styles.input}
             onChangeText={(text) => {passWord = text}}
             placeholder="请输入密码"
             secureTextEntry={true}
@@ -28,8 +32,9 @@ export default LoginScreen = ({
           style={styles.button}
           onPress={()=>{
             AV.User.logIn(userName, passWord).then( (loginedUser) => {
-               console.log(loginedUser);
-               navigator.pop()
+               navigator.pop();
+               logIn(loginedUser);
+               fetchFavList();
              }).catch(
                (error) => console.log(error)
              );
@@ -40,6 +45,14 @@ export default LoginScreen = ({
     </View>
   );
 };
+
+export default LoginScreen = connect(
+  null,
+  (dispatch) => {return{
+    fetchFavList: ()=> dispatch(fetchFavList()),
+    logIn: (user)=> dispatch(logIn(user))
+  };}
+)(Login);
 
 const styles = StyleSheet.create({
   container:{

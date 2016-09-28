@@ -4,6 +4,8 @@ import {StyleSheet,Text,View,Image,TextInput,Switch,ScrollView,ListView,
   TouchableHighlight,ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
 import {changeKeyword, setRatingFilter, fetchBooks, fetchMore} from './actions';
+import BookCell from './BookCell';
+
 const Logo = ()=>{
   return <Image source={{uri:'https://img3.doubanio.com/f/shire/8308f83ca66946299fc80efb1f10ea21f99ec2a5/pics/nav/lg_main_a11_1.png'}}
     style={styles.logo}/>;
@@ -62,26 +64,6 @@ const SearchBox = connect(
     }
   }
 )(Search);
-
-const BookCell = ({
-  book,
-  selectBook
-})=>{
-  return (
-      <TouchableHighlight
-        onPress={selectBook}
-        underlayColor='transparent'>
-        <View style={styles.bookRow}>
-          <Image source={{uri:book.image}} style={styles.bookImage}/>
-          <View style={styles.bookRowContent}>
-            <Text>{book.title}</Text>
-            <Text>{book.author}</Text>
-            <Text>{book.rating.average}</Text>
-          </View>
-        </View>
-      </TouchableHighlight>
-  );
-};
 
 const BookList = ({
   isLoadingTail,
@@ -193,19 +175,5 @@ const styles = StyleSheet.create({
   switchText: {
     marginLeft:10,
     lineHeight: 25,
-  },
-  bookRow:{
-    flex: 1,
-    flexDirection: 'row',
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderColor: '#cccccc',
-  },
-  bookRowContent:{
-    marginLeft: 15,
-  },
-  bookImage:{
-    width:100,
-    height:140,
   }
 });

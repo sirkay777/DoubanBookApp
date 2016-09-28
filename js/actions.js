@@ -1,3 +1,6 @@
+
+import AV from 'leancloud-storage';
+
 export const REQUEST_BOOKS = 'REQUEST_BOOKS';
 const requestBooks = (keyword) => {
   return{
@@ -99,5 +102,55 @@ export const changeTab = (tab) => {
   return {
     type: CHANGE_TAB,
     tab
+  };
+};
+
+export const ADD_TO_FAV = 'ADD_TO_FAV';
+export const addToFav = (book) => {
+  return {
+      type: ADD_TO_FAV,
+      book
+  };
+};
+
+export const RECEIVE_FAV_LIST = 'RECEIVE_FAV_LIST';
+const receiveFavList = (list) => {
+  return {
+    type: RECEIVE_FAV_LIST,
+    list
+  };
+};
+
+export const fetchFavList = () => {
+  return (dispatch, getState) => {
+    AV.User.currentAsync().then((currentUser) => {
+      const query = new AV.Query('Fav');
+      query.equalTo('user', currentUser);
+      query.descending('createdAt');
+      query.find().then((results) => {
+        const list = [];
+        results.map((result) => {
+          list.push(result.get('book'));
+        });
+        dispatch(receiveFavList(list));
+      });
+    }).catch(
+      (e)=>console.log(e)
+    );
+  };
+};
+
+export const LOG_IN = 'LOG_IN';
+export const logIn = (user) => {
+  return{
+      type: LOG_IN,
+      user
+  };
+};
+
+export const LOG_OUT = 'LOG_OUT';
+export const logOut = () => {
+  return{
+      type: LOG_OUT
   };
 };

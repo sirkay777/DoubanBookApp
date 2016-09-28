@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {StyleSheet,View,Text,Image,TouchableHighlight,ActivityIndicator,ScrollView, AlertIOS} from 'react-native';
 import AV from 'leancloud-storage';
+import {connect} from 'react-redux';
+import { addToFav } from './actions';
 
 class TagList extends Component{
   searchTag(tag){
@@ -26,41 +28,64 @@ class TagList extends Component{
     );
   }
 }
-export default class BookDetailScreen extends Component{
-  render(){
-    return (
-      <ScrollView contentContainerStyle={styles.container} >
-        <View style={styles.detailWrapper}>
-          <Image source={{uri:this.props.book.image}} style={styles.bookImage}/>
-          <View style={styles.bookDetail}>
-            <Text>{this.props.book.title}</Text>
-            <Text>{this.props.book.author}</Text>
-            <Text>{this.props.book.rating.average}</Text>
-            <TouchableHighlight underlayColor='transparent' onPress={()=>{
-              AV.User.currentAsync().then((currentUser) => {
-                if (!currentUser) {
-                  this.props.navigator.push({name:'login'});
-                }
-                else {
-                  AlertIOS.alert(
-                   'Success!',
-                   'Added to Fav!'
-                  );
-                }
-              }).catch(
-                (e)=>console.log(e)
-              );
-            }}>
-              <Text style={styles.addToFav}>收藏</Text>
-            </TouchableHighlight>
-          </View>
+
+const BookDetail = ({
+  book,
+  navigator,
+  addToFav
+})=>{
+  return (
+    <ScrollView contentContainerStyle={styles.container} >
+      <View style={styles.detailWrapper}>
+        <Image source={{uri:book.image}} style={styles.bookImage}/>
+        <View style={styles.bookDetail}>
+          <Text>{book.title}</Text>
+          <Text>{book.author}</Text>
+          <Text>{book.rating.average}</Text>
+          <TouchableHighlight underlayColor='transparent' onPress={()=>{
+            AV.User.currentAsync().then((currentUser) => {
+              if (!currentUser) {
+                navigator.push({name:'login'});
+              }
+              else {
+                addToFav(book);
+                AlertIOS.alert(
+                 'Success!',
+                 'Added to Fav!'
+                );
+              }
+            }).catch(
+              (e)=>console.log(e)
+            );
+          }}>
+            <Text style={styles.addToFav}>收藏</Text>
+          </TouchableHighlight>
         </View>
-        <Text style={styles.bookSummary}>{this.props.book.summary}</Text>
-        <TagList tags={this.props.book.tags} navigator={this.props.navigator}/>
-      </ScrollView>
-    );
+      </View>
+      <Text style={styles.bookSummary}>{book.summary}</Text>
+      <TagList tags={book.tags} navigator={navigator}/>
+    </ScrollView>
+  );
+};
+
+export default BookDetailScreen = connect(
+  null,
+  (dispatch) => {
+    return {addToFav: (book)=>{
+      dispatch(addToFav(book));
+      const Fav = AV.Object.extend('Fav');
+      const fav = new Fav();
+      AV.User.currentAsync().then((currentUser) => {
+        fav.set('user', currentUser);
+        fav.set('book', book);
+        fav.save();
+      }).catch(
+        (e)=>console.log(e)
+      );
+    }};
   }
-}
+)(BookDetail);
+
 
 const styles = StyleSheet.create({
   container:{

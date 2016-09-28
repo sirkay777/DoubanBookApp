@@ -1,6 +1,7 @@
 import {
   REQUEST_BOOKS, RECEIVE_BOOKS, RATING_FILTER, CHANGE_KEYWORD,
-  REQUEST_MORE, RECEIVE_MORE, CHANGE_TAB
+  REQUEST_MORE, RECEIVE_MORE, CHANGE_TAB, ADD_TO_FAV, RECEIVE_FAV_LIST,
+  LOG_IN, LOG_OUT
 } from './actions';
 import {combineReducers} from 'redux';
 
@@ -69,8 +70,32 @@ const tab = (state = 'search', action) => {
   }
 };
 
+const fav = (state = [], action) => {
+  switch(action.type) {
+    case ADD_TO_FAV:
+      return [action.book, ...state];
+    case RECEIVE_FAV_LIST:
+      return action.list;
+    default:
+      return state;
+  }
+};
+
+const user = (state = null, action) => {
+  switch(action.type) {
+    case LOG_IN:
+      return action.user;
+    case LOG_OUT:
+      return null;
+    default:
+      return state;
+  }
+};
+
 export default rootReducer = combineReducers({
   input,
   data,
-  tab
+  tab,
+  fav,
+  user
 });
